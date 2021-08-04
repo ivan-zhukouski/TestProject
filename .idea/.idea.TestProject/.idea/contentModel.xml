@@ -6,6 +6,21 @@
     <e p="E:\GameDev\TestProject" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="Entity" t="Include">
+          <e p="Player" t="Include">
+            <e p="PlayerBase.cs" t="Include" />
+            <e p="PlayerInstaller.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Environment" t="Include">
+          <e p="Boosts" t="Include">
+            <e p="ScaleBoost.cs" t="Include" />
+          </e>
+          <e p="Walls" t="Include">
+            <e p="Obstacle.cs" t="Include" />
+            <e p="WallBase.cs" t="Include" />
+          </e>
+        </e>
         <e p="GameStateMachine" t="Include">
           <e p="CallBackState.cs" t="Include" />
           <e p="IState.cs" t="Include" />

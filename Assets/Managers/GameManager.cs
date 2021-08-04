@@ -1,4 +1,5 @@
 using System;
+using Entity.Player;
 using GameStateMachine;
 using GameStateMachine.StartGameState;
 using GUI;
@@ -13,29 +14,41 @@ namespace Managers
         [Inject] private StateMachine _stateMachine;
         [Inject] private GuiHandler _gui;
         [Inject] private CallBackState _callBackState;
+        [Inject] private PlayerInstaller _playerInstaller;
         
-        private int _currentLevel => PlayerPrefs.GetInt("Level");
+        private float _distanceToCamera = 10f;
+        private Vector3 _touchPosInWarld;
+        
+        private PlayerBase _player => _playerInstaller.Player;
+        
+        private float xDeltaTouch = 0;
+        
+        private float _turnSpeed = 0.5f;
 
-        private const int MAX_COUNT_LOADING_LEVEL =14; 
-
-        private const int MAX_RAND_INDEX_LEVEL = 14;
-    
-        private const int MIN_RAND_INDEX_LEVEL = 4;
+        private Camera _cam;
 
         public static event Action LoseGameEvent;
 
         public void Initialize()
         {
+            _cam = Camera.main;
             _stateMachine.Enter<StartState>();
             _gui.SetGuiState(GuiHandler.GuiState.Start);
-            if (!PlayerPrefs.HasKey("LoopIndex"))
-            {
-                PlayerPrefs.SetInt("LoopIndex", MIN_RAND_INDEX_LEVEL);
-            }
+            
+            _player.PlayerDie += PlayerDie;
             _gui.LoseViewController.RestartEvent += RestartGame;
-            _gui.WinViewController.NextLevelEvent += NextLevel;
-           
             LoseGameEvent += _callBackState.EnterLoseState;
+        }
+        public void Dispose()
+        {
+            _gui.LoseViewController.RestartEvent -= RestartGame;
+            LoseGameEvent -= _callBackState.EnterLoseState;
+            _player.PlayerDie -= PlayerDie;
+        }
+
+        public void Tick()
+        {
+            PlayerOffset();
         }
 
         private void RestartGame()
@@ -43,54 +56,43 @@ namespace Managers
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        private void NextLevel()
+        private float _XrangeForPlayer = 2.4f;
+        private void PlayerOffset()
         {
-            PlayNextLevel();
-        }
-
-        private void PlayNextLevel()
-        {
-            SaveGame();
-            PlayerPrefs.SetInt("CurrLevel", PlayerPrefs.GetInt("CurrLevel") + 1);
-            if (_currentLevel <= MAX_COUNT_LOADING_LEVEL)
+            if (StartState.CanPlay)
             {
-                LoadNextLevel();
+                if(Input.touchCount > 0)
+                {
+                    Touch touch = Input.GetTouch(0);
+                   
+                   if (Input.GetTouch(0).phase == TouchPhase.Began && touch.position.y < Screen.height / 3)
+                   {
+                       _touchPosInWarld = _cam.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y,_distanceToCamera ));
+                       _player.Transform.position = new Vector3(_touchPosInWarld.x, _player.Transform.position.y,0 );
+                   }
+                   
+                   if (touch.phase == TouchPhase.Moved)
+                    {
+                        xDeltaTouch = touch.deltaPosition.x;
+                        Vector3 positionMultiplyer = new Vector3((xDeltaTouch * _turnSpeed) * Time.deltaTime, 0, 0);
+                        float xValue;
+                        Vector3 clampedPosition = _player.Transform.position;
+                        clampedPosition += positionMultiplyer;
+                        xValue = clampedPosition.x;
+                        _player.Transform.position = new Vector3
+                        (
+                            xValue = Mathf.Clamp(xValue, -_XrangeForPlayer, _XrangeForPlayer),
+                            clampedPosition.y,
+                            clampedPosition.z
+                        );
+                    }
+                }
+                else
+                {
+                    xDeltaTouch = 0;
+                }
             }
-            else if (_currentLevel > MAX_COUNT_LOADING_LEVEL)
-            {
-                LoadRandomLvlInRange(MIN_RAND_INDEX_LEVEL, MAX_RAND_INDEX_LEVEL);
-            }
         }
-        private void LoadRandomLvlInRange(int min, int max)
-        {
-           
-            if (PlayerPrefs.GetInt("LevelLoop") == 1)
-                PlayerPrefs.SetInt("LevelLoop", PlayerPrefs.GetInt("LevelLoop") + 1);
-            if (PlayerPrefs.GetInt("LoopIndex") > max)
-            {
-                PlayerPrefs.SetInt("LoopIndex", min);
-                PlayerPrefs.SetInt("LevelLoop", PlayerPrefs.GetInt("LevelLoop") + 1);
-            
-            }
-            PlayerPrefs.SetInt("LoopIndex", PlayerPrefs.GetInt("LoopIndex") + 1);
-            SceneManager.LoadScene(PlayerPrefs.GetInt("LoopIndex"));
-        }
-        
-        private void SaveGame()
-        {
-            PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
-            PlayerPrefs.Save();
-        }
-
-        private void LoadNextLevel()
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
-
-        public void Tick()
-        {
-        }
-
         private void PlayerDie()
         {
             LoseGameEvent?.Invoke();
@@ -99,15 +101,6 @@ namespace Managers
         private void Finish()
         {
             _callBackState.EnterWinState();
-        }
-        
-        
-
-        public void Dispose()
-        {
-            _gui.LoseViewController.RestartEvent -= RestartGame;
-            _gui.WinViewController.NextLevelEvent -= NextLevel;
-            LoseGameEvent -= _callBackState.EnterLoseState;
         }
     }
 }

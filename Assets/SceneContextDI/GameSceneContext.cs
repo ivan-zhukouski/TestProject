@@ -1,3 +1,4 @@
+using Entity.Player;
 using GameStateMachine;
 using GameStateMachine.LoseGameState;
 using GameStateMachine.PlayGameState;
@@ -16,6 +17,7 @@ namespace SceneContextDI
             BindStateMachine();
             BindGameManager();
             BindGui();
+            BindPlayerInstaller();
         }
         private void BindStateMachine()
         {
@@ -34,6 +36,11 @@ namespace SceneContextDI
         private void BindGui()
         {
             Container.Bind<GuiHandler>().FromComponentInHierarchy(true).AsSingle();
+        }
+
+        private void BindPlayerInstaller()
+        {
+            Container.Bind<PlayerInstaller>().FromComponentInHierarchy(true).AsSingle();
         }
     }
 }

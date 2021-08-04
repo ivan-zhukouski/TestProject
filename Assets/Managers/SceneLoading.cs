@@ -13,10 +13,10 @@ namespace Managers
 
         private void Start()
         {
-            if (!PlayerPrefs.HasKey("LevelLoop"))
+            /*if (!PlayerPrefs.HasKey("LevelLoop"))
             {
                 PlayerPrefs.SetInt("LevelLoop", 1);
-            }
+            }*/
             StartCoroutine(AsyncLoading());
         }
 
@@ -37,10 +37,10 @@ namespace Managers
             {
                 LoadLevel();
             }
-            if (PlayerPrefs.GetInt("Level") >= _maxCountLoadingLevel)
+            /*if (PlayerPrefs.GetInt("Level") >= _maxCountLoadingLevel)
             {
                 LoadRandLevel();
-            }
+            }*/
         }
 
         private void LoadLevel()
@@ -49,9 +49,9 @@ namespace Managers
             PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level"));
         }
         
-        private void LoadRandLevel()
+        /*private void LoadRandLevel()
         {
             _gamingLevel = SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("LoopIndex"));
-        }
+        }*/
     }
 }
