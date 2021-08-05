@@ -21,7 +21,7 @@ namespace Managers
 
         private float _distanceToCamera = 10f;
         private float _xDeltaTouch = 0;
-        private float _turnSpeed = 0.5f;
+        private float _turnSpeed = 0.3f;
         private float _currentScore = 0;
         private float _XrangeForPlayer = 2.4f;
         private float _timer = 2f;
