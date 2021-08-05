@@ -1,6 +1,7 @@
 using System;
 using GUI.GamePanel;
 using GUI.LosePanel;
+using GUI.MenuPanel;
 using GUI.StartPanel;
 using GUI.WinPanel;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace GUI
         public GameViewController GameViewController;
         public LoseViewController LoseViewController;
         public WinViewController WinViewController;
+        public MenuViewController MenuViewController;
 
         public void SetGuiState(GuiState state)
         {

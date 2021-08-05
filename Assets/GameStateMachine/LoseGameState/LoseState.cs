@@ -14,14 +14,19 @@ namespace GameStateMachine.LoseGameState
         {
             _guiHandler = guiHandler;
         }
+        
         public void Enter()
+        {
+            ActiveLosePanel();
+            StartState.CanPlay = false;
+        }
+
+        public void ActiveLosePanel()
         {
             if (_guiHandler != null)
             {
                 _guiHandler.SetGuiState(GuiHandler.GuiState.Lose);
             }
-            StartState.CanPlay = false;
-            Debug.Log("LoseState");
         }
 
         public void Exit()

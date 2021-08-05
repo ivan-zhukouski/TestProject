@@ -8,19 +8,14 @@ namespace Managers
     {
         private AsyncOperation _gamingLevel;
         
-        private const int _maxCountLoadingLevel = 15;//15
+        private const int _maxCountLoadingLevel = 15;
 
 
         private void Start()
         {
-            /*if (!PlayerPrefs.HasKey("LevelLoop"))
-            {
-                PlayerPrefs.SetInt("LevelLoop", 1);
-            }*/
             StartCoroutine(AsyncLoading());
         }
-
-
+        
         private IEnumerator AsyncLoading()
         {
             LoadingAsyncScene();
@@ -37,10 +32,6 @@ namespace Managers
             {
                 LoadLevel();
             }
-            /*if (PlayerPrefs.GetInt("Level") >= _maxCountLoadingLevel)
-            {
-                LoadRandLevel();
-            }*/
         }
 
         private void LoadLevel()
@@ -48,10 +39,5 @@ namespace Managers
             _gamingLevel = SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("Level") + 1);
             PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level"));
         }
-        
-        /*private void LoadRandLevel()
-        {
-            _gamingLevel = SceneManager.LoadSceneAsync(PlayerPrefs.GetInt("LoopIndex"));
-        }*/
     }
 }

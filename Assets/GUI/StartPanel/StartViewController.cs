@@ -10,11 +10,15 @@ namespace GUI.StartPanel
     {
         public StartView View => GetComponent<StartView>();
 
-        public static event Action StartPlayGameEvent;
+        public event Action StartPlayGameEvent;
         
         [Inject] private CallBackState _callBackState;
 
-        
+        public void OnStartBtnClick()
+        {
+            StartPlayGameEvent?.Invoke();
+        }
+
         private void OnEnable()
         {
             StartPlayGameEvent += _callBackState.EnterPlayState;
@@ -25,11 +29,6 @@ namespace GUI.StartPanel
         {
             StartPlayGameEvent -= _callBackState.EnterPlayState;
             View.PlayBnt.onClick.RemoveListener(OnStartBtnClick);
-        }
-
-        private void OnStartBtnClick()
-        {
-            StartPlayGameEvent?.Invoke();
         }
     }
 }

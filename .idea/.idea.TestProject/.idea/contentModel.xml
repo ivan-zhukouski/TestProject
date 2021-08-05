@@ -15,6 +15,7 @@
         <e p="Environment" t="Include">
           <e p="Boosts" t="Include">
             <e p="ScaleBoost.cs" t="Include" />
+            <e p="WallDestroyerBoost.cs" t="Include" />
           </e>
           <e p="Walls" t="Include">
             <e p="Obstacle.cs" t="Include" />
@@ -42,11 +43,18 @@
           <e p="GamePanel" t="Include">
             <e p="GameView.cs" t="Include" />
             <e p="GameViewController.cs" t="Include" />
+            <e p="Timer.cs" t="Include" />
           </e>
           <e p="GuiHandler.cs" t="Include" />
           <e p="LosePanel" t="Include">
             <e p="LoseView.cs" t="Include" />
             <e p="LoseViewController.cs" t="Include" />
+          </e>
+          <e p="MenuPanel" t="Include">
+            <e p="MainMenu.cs" t="Include" />
+            <e p="MenuView.cs" t="Include" />
+            <e p="MenuViewController.cs" t="Include" />
+            <e p="ScoreMenu.cs" t="Include" />
           </e>
           <e p="StartPanel" t="Include">
             <e p="StartView.cs" t="Include" />

@@ -17,12 +17,17 @@ namespace GameStateMachine.WinGameState
 
         public void Enter()
         {
+            ActiveWinPanel();
+
+            StartState.CanPlay = false;
+        }
+
+        private void ActiveWinPanel()
+        {
             if (_guiHandler != null)
             {
                 _guiHandler.SetGuiState(GuiHandler.GuiState.Win);
             }
-            StartState.CanPlay = false;
-            Debug.Log("WinState");
         }
 
         public void Exit()

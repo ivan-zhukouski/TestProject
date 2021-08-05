@@ -17,12 +17,15 @@ namespace GameStateMachine.PlayGameState
         public void Enter()
         {
             StartState.CanPlay = true;
+            ActivePlayPanel();
+        }
 
+        private void ActivePlayPanel()
+        {
             if (_guiHandler != null)
             {
                 _guiHandler.SetGuiState(GuiHandler.GuiState.Game);
             }
-            Debug.Log("Play State");
         }
 
         public void Exit()

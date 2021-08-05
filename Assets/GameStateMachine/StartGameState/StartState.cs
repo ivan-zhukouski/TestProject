@@ -8,18 +8,25 @@ namespace GameStateMachine.StartGameState
     {
         [Inject] private GuiHandler _guiHandler;
         public static bool CanPlay = false;
-        public static bool IsStartPlayGame = false;
-       
+
         public void Enter()
         {
             if (!PlayerPrefs.HasKey("CurrLevel"))
             {
                 PlayerPrefs.SetInt("CurrLevel", 1);
             }
-            IsStartPlayGame = true;
+            ActiveStartPanel();
+            
             CanPlay = false;
             PlayerPrefs.SetInt("CountLevel", PlayerPrefs.GetInt("CountLevel") + 1);
-            Debug.Log("Start State");
+        }
+
+        private void ActiveStartPanel()
+        {
+            if (_guiHandler != null)
+            {
+                _guiHandler.SetGuiState(GuiHandler.GuiState.Start);
+            }
         }
 
         public void Exit()
